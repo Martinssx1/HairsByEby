@@ -7,6 +7,7 @@ function App() {
   const generalEnquiries = " I want make an inquiry on what's available  ";
 
   const handleWhatsAppOrder = (productName: string = generalEnquiries) => {
+    alert("Button clicked");
     const message = `Hi! I'm interested, ${productName} from your website. Can you provide more details?`;
     const phoneNumber = "2349113086254";
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
