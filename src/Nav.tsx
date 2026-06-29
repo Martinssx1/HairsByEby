@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Phone, MessageCircle } from "lucide-react";
 import Themebutton from "./Theme/Themebutton";
 export type handle = {
-  handleWhatsAppOrder: (productName?: string) => void;
+  handleWhatsAppOrder: (productName?: string) => string;
 };
 function Nav({ handleWhatsAppOrder }: handle) {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -28,17 +28,21 @@ function Nav({ handleWhatsAppOrder }: handle) {
         </div>
         <div className="flex gap-4 items-center">
           <Themebutton />
-          <button
-            onClick={() => handleWhatsAppOrder()}
+          <a
+            href={handleWhatsAppOrder()}
+            target="_blank"
+            rel="noopener noreferrer"
             className="hidden md:flex items-center gap-2 px-6 py-2 rounded-full bg-green-500 text-white hover:bg-green-600 transition-all duration-300"
           >
             <MessageCircle size={18} />
             Order Now
-          </button>
-
-          <button className="md:hidden p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
+          </a>
+          <a
+            href="tel:+2349113086234"
+            className="md:hidden p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+          >
             <Phone size={20} className="text-amber-900 dark:text-amber-400" />
-          </button>
+          </a>
         </div>
       </div>
     </nav>

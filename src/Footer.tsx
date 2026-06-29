@@ -28,12 +28,14 @@ function Footer({ handleWhatsAppOrder }: handle) {
                 </button>
               </li>
               <li>
-                <button
-                  onClick={() => handleWhatsAppOrder()}
+                <a
+                  href={handleWhatsAppOrder()}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="hover:text-amber-400 transition"
                 >
                   Contact Us
-                </button>
+                </a>
               </li>
             </ul>
           </div>

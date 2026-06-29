@@ -145,15 +145,17 @@ function Home({ handleWhatsAppOrder }: handle) {
             >
               Browse Collection
             </button>
-            <button
-              onClick={() => handleWhatsAppOrder()}
+            <a
+              href={handleWhatsAppOrder()}
+              target="_blank"
+              rel="noopener noreferrer"
               className="px-8 py-4 border-2 border-amber-900 dark:border-amber-400 text-amber-900 dark:text-amber-400 rounded-full font-semibold hover:bg-amber-50 dark:hover:bg-gray-900 transition-all duration-300"
             >
               <div className="flex items-center justify-center gap-2">
                 <MessageCircle size={20} />
                 Chat on WhatsApp
               </div>
-            </button>
+            </a>
           </div>
         </div>
       </section>
@@ -258,8 +260,10 @@ function Home({ handleWhatsAppOrder }: handle) {
                   </div>
 
                   {/* Order Button */}
-                  <button
-                    onClick={() => handleWhatsAppOrder(product.name)}
+                  <a
+                    href={handleWhatsAppOrder(product.name)}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 group/btn ${
                       hoveredProduct === product.id
                         ? "bg-green-500 text-white"
@@ -274,7 +278,7 @@ function Home({ handleWhatsAppOrder }: handle) {
                         hoveredProduct === product.id ? "translate-x-1" : ""
                       }`}
                     />
-                  </button>
+                  </a>
                 </div>
               </div>
             ))}
@@ -322,13 +326,15 @@ function Home({ handleWhatsAppOrder }: handle) {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              onClick={() => handleWhatsAppOrder("I want to know more!")}
+            <a
+              href={handleWhatsAppOrder("I want to know more!")}
+              target="_blank"
+              rel="noopener noreferrer"
               className="px-8 py-4 bg-green-500 text-white rounded-full font-semibold hover:bg-green-600 transition-all duration-300 hover:shadow-lg flex items-center justify-center gap-2"
             >
               <MessageCircle size={20} />
               Message on WhatsApp
-            </button>
+            </a>
             <a
               href="tel:+2349113086234"
               className="px-8 py-4 border-2 border-white text-white rounded-full font-semibold hover:bg-white hover:text-amber-900 transition-all duration-300 flex items-center justify-center gap-2"
