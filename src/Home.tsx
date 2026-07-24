@@ -1,21 +1,48 @@
 import { useState } from "react";
 import type { handle } from "./Nav";
 
-import { Phone, MessageCircle, Star, ArrowRight } from "lucide-react";
+import {
+  Phone,
+  MessageCircle,
+  Star,
+  ArrowRight,
+  ArrowRightIcon,
+  ArrowLeftIcon,
+} from "lucide-react";
+type Media = {
+  type: string;
+  src: string;
+};
 
-interface HairProduct {
+type HairProduct = {
   id: number;
   name: string;
   description: string;
   price: number;
-  image: string;
+  display: Media[];
   category: string;
   rating: number;
-}
+};
 
 function Home({ handleWhatsAppOrder }: handle) {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [hoveredProduct, setHoveredProduct] = useState<number | null>(null);
+  const [currentDisplay, setCurrentDisplay] = useState([0, 0, 0, 0, 0, 0]);
+
+  function nextImage(index: number) {
+    setCurrentDisplay((prev) => {
+      const copy = [...prev];
+      copy[index]++;
+      return copy;
+    });
+  }
+  function previousImage(index: number) {
+    setCurrentDisplay((prev) => {
+      const copy = [...prev];
+      copy[index]--;
+      return copy;
+    });
+  }
   const posters = [
     {
       title: "100% Human Hair",
@@ -37,7 +64,24 @@ function Home({ handleWhatsAppOrder }: handle) {
       name: "Silky Straight",
       description: "Premium straight human hair with natural shine",
       price: 45000,
-      image: "IMG_0455.PNG",
+      display: [
+        {
+          type: "image",
+          src: "/media/front of silky 2.jpg",
+        },
+        {
+          type: "image",
+          src: "/media/front of silky.jpg",
+        },
+        {
+          type: "image",
+          src: "/media/back of silky.jpg",
+        },
+        {
+          type: "video",
+          src: "/media/silky.mp4",
+        },
+      ],
       category: "straight",
       rating: 4.8,
     },
@@ -46,7 +90,24 @@ function Home({ handleWhatsAppOrder }: handle) {
       name: "Bouncy Curls",
       description: "Defined curly texture for volume and style",
       price: 52000,
-      image: "IMG_0456.PNG",
+      display: [
+        {
+          type: "image",
+          src: "/media/curly front.jpg",
+        },
+        {
+          type: "video",
+          src: "/media/curly front.mp4",
+        },
+        {
+          type: "image",
+          src: "/media/curly front.jpg",
+        },
+        {
+          type: "video",
+          src: "/media/curly front.mp4",
+        },
+      ],
       category: "curly",
       rating: 4.9,
     },
@@ -55,7 +116,24 @@ function Home({ handleWhatsAppOrder }: handle) {
       name: "Wavy Crown",
       description: "Soft waves for a natural, elegant look",
       price: 48000,
-      image: "IMG_0457.PNG",
+      display: [
+        {
+          type: "video",
+          src: "/media/back of bob.mp4",
+        },
+        {
+          type: "video",
+          src: "/media/back of bob.mp4",
+        },
+        {
+          type: "video",
+          src: "/media/back of bob.mp4",
+        },
+        {
+          type: "video",
+          src: "/media/back of bob.mp4",
+        },
+      ],
       category: "wavy",
       rating: 4.7,
     },
@@ -64,7 +142,24 @@ function Home({ handleWhatsAppOrder }: handle) {
       name: "Colored Lengths",
       description: "Pre-colored hair with rich tones",
       price: 55000,
-      image: "IMG_0458.PNG",
+      display: [
+        {
+          type: "image",
+          src: "IMG_0460.PNG",
+        },
+        {
+          type: "image",
+          src: "media/20260722_140045.jpg",
+        },
+        {
+          type: "image",
+          src: "media/20260722_140050.jpg",
+        },
+        {
+          type: "image",
+          src: "media/20260722_140045.jpg",
+        },
+      ],
       category: "colored",
       rating: 4.8,
     },
@@ -73,7 +168,24 @@ function Home({ handleWhatsAppOrder }: handle) {
       name: "Virgin Closure",
       description: "Natural hairline closure for seamless blend",
       price: 38000,
-      image: "IMG_0460.PNG",
+      display: [
+        {
+          type: "image",
+          src: "IMG_0460.PNG",
+        },
+        {
+          type: "image",
+          src: "/media/20260722_141126.jpg",
+        },
+        {
+          type: "image",
+          src: "/IMG_0463.PNG",
+        },
+        {
+          type: "image",
+          src: "/media/20260722_141126.jpg",
+        },
+      ],
       category: "closures",
       rating: 4.9,
     },
@@ -82,7 +194,24 @@ function Home({ handleWhatsAppOrder }: handle) {
       name: "Frontal Lace",
       description: "Full lace frontal with baby hairs",
       price: 65000,
-      image: "IMG_0463.PNG",
+      display: [
+        {
+          type: "image",
+          src: "/IMG_0456.PNG",
+        },
+        {
+          type: "image",
+          src: "/IMG_0456.PNG",
+        },
+        {
+          type: "image",
+          src: "/IMG_0456.PNG",
+        },
+        {
+          type: "image",
+          src: "/IMG_0456.PNG",
+        },
+      ],
       category: "closures",
       rating: 5.0,
     },
@@ -192,96 +321,144 @@ function Home({ handleWhatsAppOrder }: handle) {
 
           {/* Products Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredProducts.map((product, index) => (
-              <div
-                key={product.id}
-                className="group cursor-pointer"
-                onMouseEnter={() => setHoveredProduct(product.id)}
-                onMouseLeave={() => setHoveredProduct(null)}
-                style={{
-                  animation: `slideUp 0.6s ease-out ${index * 0.1}s both`,
-                }}
-              >
-                <div className="relative overflow-hidden rounded-xl mb-6 bg-white dark:bg-gray-800">
-                  {/* Image Container */}
-                  <div className="relative h-80 overflow-hidden">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className={`w-full h-full object-cover transition-transform duration-500 ${
-                        hoveredProduct === product.id
-                          ? "scale-110"
-                          : "scale-100"
-                      }`}
-                    />
-                    {/* Overlay */}
-                    <div
-                      className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${
-                        hoveredProduct === product.id
-                          ? "opacity-100"
-                          : "opacity-0"
-                      }`}
-                    ></div>
-                  </div>
+            {filteredProducts.map((product, index) => {
+              const current = product.display[currentDisplay[index]];
 
-                  {/* Badge */}
-                  <div className="absolute top-4 right-4 bg-white dark:bg-gray-900 px-4 py-2 rounded-full text-sm font-semibold text-amber-900 dark:text-amber-400 shadow-lg">
-                    ₦{product.price.toLocaleString()}
-                  </div>
-                </div>
-
-                {/* Product Info */}
-                <div>
-                  <h3 className="text-xl font-bold text-amber-900 dark:text-amber-400 mb-2">
-                    {product.name}
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-4 text-sm leading-relaxed">
-                    {product.description}
-                  </p>
-
-                  {/* Rating */}
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="flex">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          size={16}
-                          className={`${
-                            i < Math.floor(product.rating)
-                              ? "fill-amber-400 text-amber-400"
-                              : "text-gray-300 dark:text-gray-600"
+              return (
+                <div
+                  key={product.id}
+                  className="group cursor-pointer"
+                  onMouseEnter={() => setHoveredProduct(product.id)}
+                  onMouseLeave={() => setHoveredProduct(null)}
+                  style={{
+                    animation: `slideUp 0.6s ease-out ${index * 0.1}s both`,
+                  }}
+                >
+                  <div className="relative overflow-hidden rounded-xl mb-6 bg-white dark:bg-gray-800">
+                    {/* Image Container */}
+                    {
+                      //here
+                    }
+                    <div className="relative h-[445px] overflow-hidden">
+                      {current && current.type === "image" ? (
+                        <img
+                          className={`w-full h-full object-cover transition-transform duration-500 ${
+                            hoveredProduct === product.id
+                              ? "scale-110"
+                              : "scale-100"
                           }`}
+                          src={current.src}
+                          alt={product.name}
                         />
-                      ))}
+                      ) : current ? (
+                        <video
+                          className={`w-full h-full object-cover transition-transform duration-500 ${
+                            hoveredProduct === product.id
+                              ? "scale-110"
+                              : "scale-100"
+                          }`}
+                          src={current.src}
+                          autoPlay
+                          loop
+                          muted
+                        />
+                      ) : null}
+
+                      {/* Overlay */}
+                      <div
+                        className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${
+                          hoveredProduct === product.id
+                            ? "opacity-100"
+                            : "opacity-0"
+                        }`}
+                      >
+                        <div>
+                          {currentDisplay[index] ===
+                          product.display.length - 1 ? null : (
+                            <button
+                              className="absolute flex justify-center mr-1 right-0 top-[50%] p-1 bg-white rounded-full"
+                              onClick={() => {
+                                nextImage(index);
+                              }}
+                            >
+                              <ArrowRightIcon />
+                            </button>
+                          )}
+                        </div>
+                        <div>
+                          {currentDisplay[index] === 0 ? null : (
+                            <button
+                              className="absolute justify-center flex ml-1 p-1 bg-white rounded-full left-0 top-[50%]"
+                              onClick={() => {
+                                previousImage(index);
+                              }}
+                            >
+                              <ArrowLeftIcon />
+                            </button>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
-                      ({product.rating})
-                    </span>
+
+                    {/* Badge */}
+                    <div className="absolute top-4 right-4 bg-white dark:bg-gray-900 px-4 py-2 rounded-full text-sm font-semibold text-amber-900 dark:text-amber-400 shadow-lg">
+                      ₦{product.price.toLocaleString()}
+                    </div>
                   </div>
 
-                  {/* Order Button */}
-                  <a
-                    href={handleWhatsAppOrder(product.name)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 group/btn ${
-                      hoveredProduct === product.id
-                        ? "bg-green-500 text-white"
-                        : "bg-gray-100 dark:bg-gray-700 text-amber-900 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-gray-600"
-                    }`}
-                  >
-                    <MessageCircle size={18} />
-                    Order on WhatsApp
-                    <ArrowRight
-                      size={18}
-                      className={`transition-transform duration-300 ${
-                        hoveredProduct === product.id ? "translate-x-1" : ""
+                  {/* Product Info */}
+                  <div>
+                    <h3 className="text-xl font-bold text-amber-900 dark:text-amber-400 mb-2">
+                      {product.name}
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-400 mb-4 text-sm leading-relaxed">
+                      {product.description}
+                    </p>
+
+                    {/* Rating */}
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="flex">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            size={16}
+                            className={`${
+                              i < Math.floor(product.rating)
+                                ? "fill-amber-400 text-amber-400"
+                                : "text-gray-300 dark:text-gray-600"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                        ({product.rating})
+                      </span>
+                    </div>
+
+                    {/* Order Button */}
+                    <a
+                      href={handleWhatsAppOrder(product.name)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 group/btn ${
+                        hoveredProduct === product.id
+                          ? "bg-green-500 text-white"
+                          : "bg-gray-100 dark:bg-gray-700 text-amber-900 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-gray-600"
                       }`}
-                    />
-                  </a>
+                    >
+                      <MessageCircle size={18} />
+                      Order on WhatsApp
+                      <ArrowRight
+                        size={18}
+                        className={`transition-transform duration-300 ${
+                          hoveredProduct === product.id ? "translate-x-1" : ""
+                        }`}
+                      />
+                    </a>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
