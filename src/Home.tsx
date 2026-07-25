@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { handle } from "./Nav";
 
 import {
@@ -28,6 +28,19 @@ function Home({ handleWhatsAppOrder }: handle) {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [hoveredProduct, setHoveredProduct] = useState<number | null>(null);
   const [currentDisplay, setCurrentDisplay] = useState([0, 0, 0, 0, 0, 0]);
+  const [mobile, setMobile] = useState(window.innerWidth < 768);
+  const swipe = useRef(0);
+
+  useEffect(() => {
+    function handleResize() {
+      setMobile(window.innerWidth < 768);
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   function nextImage(index: number) {
     setCurrentDisplay((prev) => {
@@ -339,66 +352,132 @@ function Home({ handleWhatsAppOrder }: handle) {
                     {
                       //here
                     }
-                    <div className="relative h-[445px] overflow-hidden">
-                      {current && current.type === "image" ? (
-                        <img
-                          className={`w-full h-full object-cover transition-transform duration-500 ${
-                            hoveredProduct === product.id
-                              ? "scale-110"
-                              : "scale-100"
-                          }`}
-                          src={current.src}
-                          alt={product.name}
-                        />
-                      ) : current ? (
-                        <video
-                          className={`w-full h-full object-cover transition-transform duration-500 ${
-                            hoveredProduct === product.id
-                              ? "scale-110"
-                              : "scale-100"
-                          }`}
-                          src={current.src}
-                          autoPlay
-                          loop
-                          muted
-                        />
-                      ) : null}
 
-                      {/* Overlay */}
+                    {mobile ? (
                       <div
-                        className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${
-                          hoveredProduct === product.id
-                            ? "opacity-100"
-                            : "opacity-0"
-                        }`}
+                        className="relative h-[445px] overflow-hidden"
+                        onTouchStart={(e) => {
+                          swipe.current = e.touches[0].clientX;
+                        }}
+                        onTouchEnd={(e) => {
+                          const endSwipe = e.changedTouches[0].clientX;
+
+                          const distance = swipe.current - endSwipe;
+                          if (distance > 50) {
+                            if (currentDisplay[index] === 0) {
+                              return null;
+                            }
+                            previousImage(index);
+                          }
+
+                          if (distance < -50) {
+                            if (
+                              currentDisplay[index] ===
+                              product.display.length - 1
+                            ) {
+                              return null;
+                            }
+                            nextImage(index);
+                          }
+                        }}
                       >
-                        <div>
-                          {currentDisplay[index] ===
-                          product.display.length - 1 ? null : (
-                            <button
-                              className="absolute flex justify-center mr-1 right-0 top-[50%] p-1 bg-white rounded-full"
-                              onClick={() => {
-                                nextImage(index);
-                              }}
-                            >
-                              <ArrowRightIcon />
-                            </button>
-                          )}
-                        </div>
-                        <div>
-                          {currentDisplay[index] === 0 ? null : (
-                            <button
-                              className="absolute justify-center flex ml-1 p-1 bg-white rounded-full left-0 top-[50%]"
-                              onClick={() => {
-                                previousImage(index);
-                              }}
-                            >
-                              <ArrowLeftIcon />
-                            </button>
-                          )}
+                        {current && current.type === "image" ? (
+                          <img
+                            className={`w-full h-full object-cover transition-transform duration-500 ${
+                              hoveredProduct === product.id
+                                ? "scale-110"
+                                : "scale-100"
+                            }`}
+                            src={current.src}
+                            alt={product.name}
+                          />
+                        ) : current ? (
+                          <video
+                            className={`w-full h-full object-cover transition-transform duration-500 ${
+                              hoveredProduct === product.id
+                                ? "scale-110"
+                                : "scale-100"
+                            }`}
+                            src={current.src}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                          />
+                        ) : null}
+
+                        {/* Overlay */}
+                        <div
+                          className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${
+                            hoveredProduct === product.id
+                              ? "opacity-100"
+                              : "opacity-0"
+                          }`}
+                        ></div>
+                      </div>
+                    ) : (
+                      <div className="relative h-[445px] overflow-hidden">
+                        {current && current.type === "image" ? (
+                          <img
+                            className={`w-full h-full object-cover transition-transform duration-500 ${
+                              hoveredProduct === product.id
+                                ? "scale-110"
+                                : "scale-100"
+                            }`}
+                            src={current.src}
+                            alt={product.name}
+                          />
+                        ) : current ? (
+                          <video
+                            className={`w-full h-full object-cover transition-transform duration-500 ${
+                              hoveredProduct === product.id
+                                ? "scale-110"
+                                : "scale-100"
+                            }`}
+                            src={current.src}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                          />
+                        ) : null}
+
+                        {/* Overlay */}
+                        <div
+                          className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${
+                            hoveredProduct === product.id
+                              ? "opacity-100"
+                              : "opacity-0"
+                          }`}
+                        >
+                          <div>
+                            {currentDisplay[index] ===
+                            product.display.length - 1 ? null : (
+                              <button
+                                className="absolute flex justify-center mr-1 right-0 top-[50%] p-1 bg-white rounded-full"
+                                onClick={() => {
+                                  nextImage(index);
+                                }}
+                              >
+                                <ArrowRightIcon />
+                              </button>
+                            )}
+                          </div>
+                          <div>
+                            {currentDisplay[index] === 0 ? null : (
+                              <button
+                                className="absolute justify-center flex ml-1 p-1 bg-white rounded-full left-0 top-[50%]"
+                                onClick={() => {
+                                  previousImage(index);
+                                }}
+                              >
+                                <ArrowLeftIcon />
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    )}
 
                     {/* Badge */}
                     <div className="absolute top-4 right-4 bg-white dark:bg-gray-900 px-4 py-2 rounded-full text-sm font-semibold text-amber-900 dark:text-amber-400 shadow-lg">
