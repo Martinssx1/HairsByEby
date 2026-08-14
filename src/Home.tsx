@@ -172,9 +172,15 @@ function Home({ handleWhatsAppOrder }: handle) {
                   className="group cursor-pointer"
                   onMouseEnter={() => setHoveredProduct(product.id)}
                   onMouseLeave={() => setHoveredProduct(null)}
+                  onTouchStart={() => setHoveredProduct(product.id)}
                   style={{
                     animation: `slideUp 0.6s ease-out ${index * 0.1}s both`,
                   }}
+                  onClick={() =>
+                    setHoveredProduct(
+                      hoveredProduct === product.id ? null : product.id,
+                    )
+                  }
                 >
                   <div className="relative overflow-hidden rounded-xl mb-6 bg-white dark:bg-gray-800">
                     {/* Image Container */}

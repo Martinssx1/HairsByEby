@@ -24,9 +24,7 @@ export default function Desktop({ index, product }: MobileProps) {
             >
               {p.type === "image" ? (
                 <img
-                  className={`w-full h-full object-cover transition-transform duration-500 ${
-                    hoveredProduct === product.id ? "scale-105" : "scale-100"
-                  }`}
+                  className={`w-full h-full object-cover transition-transform duration-500 `}
                   src={p.src}
                   alt={product.name}
                 />
@@ -36,9 +34,7 @@ export default function Desktop({ index, product }: MobileProps) {
                     <Play size={25} className="text-white fill-white" />
                   </div>
                   <video
-                    className={`w-full h-full object-cover transition-transform duration-500 ${
-                      hoveredProduct === product.id ? "scale-105" : "scale-100"
-                    }`}
+                    className={`w-full h-full object-cover transition-transform duration-500`}
                     src={p.src}
                     autoPlay
                     loop

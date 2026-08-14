@@ -25,7 +25,7 @@ export interface Contexttypes {
   nextImage: (index: number) => void;
   previousImage: (index: number) => void;
   currentDisplay: number[];
-  swipe: React.RefObject<number>;
+  swipe: React.RefObject<{ xswipe: number; yswipe: number }>;
   hoveredProduct: number | null;
   setHoveredProduct: React.Dispatch<React.SetStateAction<number | null>>;
   setCurrentDisplay: React.Dispatch<React.SetStateAction<number[]>>;
@@ -33,7 +33,10 @@ export interface Contexttypes {
 
 export default function HairContext({ children }: HairContextProps) {
   const [currentDisplay, setCurrentDisplay] = useState([0, 0, 0, 0, 0, 0]);
-  const swipe = useRef(0);
+  const swipe = useRef({
+    xswipe: 0,
+    yswipe: 0,
+  });
   const [hoveredProduct, setHoveredProduct] = useState<number | null>(null);
   const hairProducts: HairProduct[] = [
     {

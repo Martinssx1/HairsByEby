@@ -6,23 +6,29 @@ type MobileProps = {
   product: HairProduct;
 };
 export default function Mobile({ index, product }: MobileProps) {
-  const { previousImage, currentDisplay, swipe, nextImage, hoveredProduct } =
-    useHairContext();
+  const { previousImage, currentDisplay, swipe, nextImage } = useHairContext();
   const imageContainer = product.display;
   return (
     <div
       className="relative  aspect-[9/14] flex overflow-hidden "
       onTouchStart={(e) => {
-        swipe.current = e.touches[0].clientX;
+        swipe.current.xswipe = e.touches[0].clientX;
+        swipe.current.yswipe = e.touches[0].clientY;
       }}
       onTouchEnd={(e) => {
-        const endSwipe = e.changedTouches[0].clientX;
+        const endSwipeX = e.changedTouches[0].clientX;
+        const endSwipeY = e.changedTouches[0].clientY;
+
         console.log("dispay", currentDisplay);
         console.log("index", currentDisplay[index]);
 
-        const distance = swipe.current - endSwipe;
-        console.log("distance", distance);
-        if (distance > 50) {
+        const distanceX = swipe.current.xswipe - endSwipeX;
+        const distanceY = swipe.current.yswipe - endSwipeY;
+        if (Math.abs(distanceY) > Math.abs(distanceX)) {
+          return;
+        }
+        console.log("distance", distanceX);
+        if (distanceX > 50) {
           if (currentDisplay[index] === product.display.length - 1) {
             return null;
           }
@@ -30,7 +36,7 @@ export default function Mobile({ index, product }: MobileProps) {
           nextImage(index);
         }
 
-        if (distance < -50) {
+        if (distanceX < -50) {
           if (currentDisplay[index] === 0) {
             return null;
           }
@@ -50,17 +56,13 @@ export default function Mobile({ index, product }: MobileProps) {
           >
             {p.type === "image" ? (
               <img
-                className={`w-full h-full object-cover object-top transition-transform duration-500 ${
-                  hoveredProduct === product.id ? "scale-105" : "scale-100"
-                }`}
+                className={`w-full h-full object-cover object-top transition-transform duration-500 `}
                 src={p.src}
                 alt={product.name}
               />
             ) : (
               <video
-                className={`w-full h-full object-cover object-top transition-transform duration-500 ${
-                  hoveredProduct === product.id ? "scale-105" : "scale-100"
-                }`}
+                className={`w-full h-full object-cover object-top transition-transform duration-500`}
                 src={p.src}
                 autoPlay
                 loop
