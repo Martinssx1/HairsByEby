@@ -170,17 +170,14 @@ function Home({ handleWhatsAppOrder }: handle) {
                 <div
                   key={product.id}
                   className="group cursor-pointer"
-                  onMouseEnter={() => setHoveredProduct(product.id)}
+                  onMouseEnter={() => {
+                    setHoveredProduct(product.id);
+                  }}
                   onMouseLeave={() => setHoveredProduct(null)}
                   onTouchStart={() => setHoveredProduct(product.id)}
                   style={{
                     animation: `slideUp 0.6s ease-out ${index * 0.1}s both`,
                   }}
-                  onClick={() =>
-                    setHoveredProduct(
-                      hoveredProduct === product.id ? null : product.id,
-                    )
-                  }
                 >
                   <div className="relative overflow-hidden rounded-xl mb-6 bg-white dark:bg-gray-800">
                     {/* Image Container */}
@@ -196,7 +193,10 @@ function Home({ handleWhatsAppOrder }: handle) {
                       {product.display.map((_, i) => (
                         <div
                           key={i}
-                          onClick={() => goSlide(index, i)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            goSlide(index, i);
+                          }}
                           className={`rounded-full  border-2 border-white p-[2px] ${currentDisplay[index] === i ? "bg-white" : ""}`}
                         ></div>
                       ))}

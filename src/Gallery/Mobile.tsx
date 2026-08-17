@@ -1,5 +1,6 @@
 import { useHairContext } from "../Context/useContext";
 import type { HairProduct } from "../Context/HairContext";
+import { Play } from "lucide-react";
 
 type MobileProps = {
   index: number;
@@ -19,15 +20,12 @@ export default function Mobile({ index, product }: MobileProps) {
         const endSwipeX = e.changedTouches[0].clientX;
         const endSwipeY = e.changedTouches[0].clientY;
 
-        console.log("dispay", currentDisplay);
-        console.log("index", currentDisplay[index]);
-
         const distanceX = swipe.current.xswipe - endSwipeX;
         const distanceY = swipe.current.yswipe - endSwipeY;
         if (Math.abs(distanceY) > Math.abs(distanceX)) {
           return;
         }
-        console.log("distance", distanceX);
+
         if (distanceX > 50) {
           if (currentDisplay[index] === product.display.length - 1) {
             return null;
@@ -58,17 +56,24 @@ export default function Mobile({ index, product }: MobileProps) {
               <img
                 className={`w-full h-full object-cover object-top transition-transform duration-500 `}
                 src={p.src}
+                loading="lazy"
                 alt={product.name}
               />
             ) : (
-              <video
-                className={`w-full h-full object-cover object-top transition-transform duration-500`}
-                src={p.src}
-                autoPlay
-                loop
-                muted
-                playsInline
-              />
+              <>
+                <div className="absolute top-3 left-3 bg-black/60 rounded-full p-2">
+                  <Play size={25} className="text-white fill-white" />
+                </div>
+                <video
+                  className={`w-full h-full object-cover object-top transition-transform duration-500`}
+                  src={p.src}
+                  preload="metadata"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                />
+              </>
             )}
           </div>
         ))}

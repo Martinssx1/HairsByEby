@@ -1,4 +1,4 @@
-import { ArrowLeftIcon, ArrowRightIcon, Play } from "lucide-react";
+import { ChevronLeft, Play, ChevronRight } from "lucide-react";
 import type { HairProduct } from "../Context/HairContext";
 import { useHairContext } from "../Context/useContext";
 
@@ -12,7 +12,7 @@ export default function Desktop({ index, product }: MobileProps) {
   const imageContainer = product.display;
   return (
     <>
-      <div className="relative flex h-[600px] max-w-[800px] overflow-hidden">
+      <div className="relative flex h-[470px] max-w-[800px] overflow-hidden">
         {imageContainer &&
           imageContainer.map((p, i) => (
             <div
@@ -26,6 +26,7 @@ export default function Desktop({ index, product }: MobileProps) {
                 <img
                   className={`w-full h-full object-cover transition-transform duration-500 `}
                   src={p.src}
+                  loading="lazy"
                   alt={product.name}
                 />
               ) : (
@@ -35,6 +36,7 @@ export default function Desktop({ index, product }: MobileProps) {
                   </div>
                   <video
                     className={`w-full h-full object-cover transition-transform duration-500`}
+                    preload="metadata"
                     src={p.src}
                     autoPlay
                     loop
@@ -53,11 +55,12 @@ export default function Desktop({ index, product }: MobileProps) {
                   product.display.length - 1 ? null : (
                     <button
                       className="absolute flex justify-center mr-1 right-0 top-[50%] p-1 bg-white rounded-full"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation();
                         nextImage(index);
                       }}
                     >
-                      <ArrowRightIcon />
+                      <ChevronRight />
                     </button>
                   )}
                 </div>
@@ -65,11 +68,12 @@ export default function Desktop({ index, product }: MobileProps) {
                   {currentDisplay[index] === 0 ? null : (
                     <button
                       className="absolute justify-center flex ml-1 p-1 bg-white rounded-full left-0 top-[50%]"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation();
                         previousImage(index);
                       }}
                     >
-                      <ArrowLeftIcon />
+                      <ChevronLeft />
                     </button>
                   )}
                 </div>
