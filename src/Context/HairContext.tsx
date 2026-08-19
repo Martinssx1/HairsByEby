@@ -8,6 +8,7 @@ interface HairContextProps {
 type Media = {
   type: string;
   src: string;
+  poster?: string;
 };
 
 export type HairProduct = {
@@ -24,20 +25,31 @@ export interface Contexttypes {
   hairProducts: HairProduct[];
   nextImage: (index: number) => void;
   previousImage: (index: number) => void;
-  currentDisplay: number[];
+  handleIsReady: (productIndex: number) => void;
+  currentDisplay: { index: number; isReady: boolean }[];
   swipe: React.RefObject<{ xswipe: number; yswipe: number }>;
   hoveredProduct: number | null;
   setHoveredProduct: React.Dispatch<React.SetStateAction<number | null>>;
-  setCurrentDisplay: React.Dispatch<React.SetStateAction<number[]>>;
+  setCurrentDisplay: React.Dispatch<
+    React.SetStateAction<{ index: number; isReady: boolean }[]>
+  >;
 }
 
 export default function HairContext({ children }: HairContextProps) {
-  const [currentDisplay, setCurrentDisplay] = useState([0, 0, 0, 0, 0, 0]);
+  const [currentDisplay, setCurrentDisplay] = useState([
+    { index: 0, isReady: false },
+    { index: 0, isReady: false },
+    { index: 0, isReady: false },
+    { index: 0, isReady: false },
+    { index: 0, isReady: false },
+    { index: 0, isReady: false },
+  ]);
   const swipe = useRef({
     xswipe: 0,
     yswipe: 0,
   });
   const [hoveredProduct, setHoveredProduct] = useState<number | null>(null);
+
   const hairProducts: HairProduct[] = [
     {
       id: 1,
@@ -60,6 +72,7 @@ export default function HairContext({ children }: HairContextProps) {
         {
           type: "video",
           src: "/media/silky.mp4",
+          poster: "/media/silky.PNG",
         },
       ],
       category: "straight",
@@ -76,8 +89,8 @@ export default function HairContext({ children }: HairContextProps) {
           src: "/media/curly front2.jpg",
         },
         {
-          type: "video",
-          src: "/media/curly front.mp4",
+          type: "image",
+          src: "/media/curly front2.jpg",
         },
         {
           type: "image",
@@ -86,6 +99,7 @@ export default function HairContext({ children }: HairContextProps) {
         {
           type: "video",
           src: "/media/curly front.mp4",
+          poster: "/media/curly front pic.jpg",
         },
       ],
       category: "curly",
@@ -98,20 +112,21 @@ export default function HairContext({ children }: HairContextProps) {
       price: 48000,
       display: [
         {
-          type: "video",
-          src: "/media/back of bob.mp4",
+          type: "image",
+          src: "/media/20260722_141903.jpg",
+        },
+        {
+          type: "image",
+          src: "/media/20260722_141903.jpg",
+        },
+        {
+          type: "image",
+          src: "/media/20260722_141903.jpg",
         },
         {
           type: "video",
           src: "/media/back of bob.mp4",
-        },
-        {
-          type: "video",
-          src: "/media/back of bob.mp4",
-        },
-        {
-          type: "video",
-          src: "/media/back of bob.mp4",
+          poster: "/media/back of bob pic.PNG",
         },
       ],
       category: "wavy",
@@ -136,8 +151,9 @@ export default function HairContext({ children }: HairContextProps) {
           src: "media/20260722_140050.jpg",
         },
         {
-          type: "image",
-          src: "media/20260722_140045.jpg",
+          type: "video",
+          src: "/media/curly front.mp4",
+          poster: "/media/curly front pic.PNG",
         },
       ],
       category: "colored",
@@ -162,8 +178,9 @@ export default function HairContext({ children }: HairContextProps) {
           src: "/IMG_0463.PNG",
         },
         {
-          type: "image",
-          src: "/media/20260722_141126.jpg",
+          type: "video",
+          src: "/media/curly front.mp4",
+          poster: "/media/curly front pic.PNG",
         },
       ],
       category: "closures",
@@ -199,14 +216,34 @@ export default function HairContext({ children }: HairContextProps) {
   function nextImage(index: number) {
     setCurrentDisplay((prev) => {
       const copy = [...prev];
-      copy[index]++;
+      copy[index] = {
+        ...copy[index],
+        index: copy[index].index + 1,
+      };
+
       return copy;
     });
   }
   function previousImage(index: number) {
     setCurrentDisplay((prev) => {
       const copy = [...prev];
-      copy[index]--;
+      copy[index] = {
+        ...copy[index],
+        index: copy[index].index - 1,
+      };
+
+      return copy;
+    });
+  }
+  function handleIsReady(productIndex: number) {
+    setCurrentDisplay((prev) => {
+      const copy = [...prev];
+      copy[productIndex] = {
+        ...copy[productIndex],
+        isReady: true,
+      };
+
+      copy[productIndex].isReady = true;
       return copy;
     });
   }
@@ -222,6 +259,7 @@ export default function HairContext({ children }: HairContextProps) {
         hoveredProduct,
         setHoveredProduct,
         setCurrentDisplay,
+        handleIsReady,
       }}
     >
       {children}

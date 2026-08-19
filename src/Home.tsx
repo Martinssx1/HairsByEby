@@ -17,6 +17,7 @@ function Home({ handleWhatsAppOrder }: handle) {
   } = useHairContext();
 
   const [isTouch, setIsTouch] = useState(false);
+  // const [videoReady, setVideoReady] = useState(false);
 
   useEffect(() => {
     const media = window.matchMedia("(pointer: coarse)");
@@ -63,7 +64,7 @@ function Home({ handleWhatsAppOrder }: handle) {
   function goSlide(productIndex: number, slideIndex: number) {
     setCurrentDisplay((prev) => {
       const copy = [...prev];
-      copy[productIndex] = slideIndex;
+      copy[productIndex].index = slideIndex;
       return copy;
     });
   }
@@ -138,7 +139,6 @@ function Home({ handleWhatsAppOrder }: handle) {
               Handpicked hair extensions for every style and preference
             </p>
           </div>
-
           {/* Category Filter */}
           <div className="flex flex-wrap justify-center gap-3 mb-12">
             {categories.map((cat) => (
@@ -155,17 +155,9 @@ function Home({ handleWhatsAppOrder }: handle) {
               </button>
             ))}
           </div>
-
           {/* Products Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProducts.map((product, index) => {
-              //   const imageContainer = product.display;
-              //  const current = product.display[currentDisplay[index]];
-              // console.log("current display", current);
-              //console.log("productdisplay", product.display);
-
-              // console.log("index", currentDisplay[index]);
-
               return (
                 <div
                   key={product.id}
@@ -197,7 +189,7 @@ function Home({ handleWhatsAppOrder }: handle) {
                             e.stopPropagation();
                             goSlide(index, i);
                           }}
-                          className={`rounded-full  border-2 border-white p-[2px] ${currentDisplay[index] === i ? "bg-white" : ""}`}
+                          className={`rounded-full  border-2 border-white p-[2px] ${currentDisplay[index].index === i ? "bg-white" : ""}`}
                         ></div>
                       ))}
                     </div>
